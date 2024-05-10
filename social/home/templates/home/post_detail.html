@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %} Post Detail {% endblock %}
+{% block content %} 
+<a href="{% url 'profiles:user_profile' post.user.id %}">{{post.user.fullname}}</a>
+<a class="text-center"><h2>{{post.title|safe}}</h2></a><br/>
+<small>
+created: {{post.created|date:"Y M d"}}<br/>
+<br/><br/>
+<p>{{post.body|safe}}<p>
+<br/><br/>
+
+{% if request.user.phone == user.phone %}
+<a href="{% url 'home:post_delete' post.id post.slug %}" class="btn btn-danger">Delete</a>
+<a href="{% url 'home:post_update' post.id post.slug %}" class="btn btn-primary">Update</a>
+{% else %}
+{% if like %}
+<a href="{% url 'home:post_unlike' post.id %}" class="btn btn-info">UnLike({{likes.count}})</a>
+{% else %}
+<a href="{% url 'home:post_like' post.id %}" class="btn btn-info">Like({{likes.count}})</a>
+{% endif %}
+{% endif %}
+<hr/>
+<h5>Comments({{comments.count}})</h5><br/>
+<a href="{% url 'home:comment_add' post.id %}" class="btn btn-primary">add comment</a><br/><br/>
+{% for comments in comments %}
+<div class="card bg-dark text-white mb-3">
+  <div class="card-header"><a href="{% url 'profiles:user_profile' comments.from_user.id %}">{{comments.from_user}}</a><a>({{comments.created|timesince}})</a></div>
+  <div class="card-body">
+    <p class="card-text">{{comments.body|safe}}</p>
+    <div><a href="{% url 'home:comment_replay' comments.id post.id %}" class="btn btn-primary">Replay</a></div><br/>
+    {% for replay in replay %}
+    {% if replay.to_comment == comments%}
+    <div class="card bg-white text-dark mb-3">
+      <div class="card-header"><a href="{% url 'profiles:user_profile' replay.from_user.id %}">{{replay.from_user}}</a><a>({{replay.created|timesince}})</a></div>
+      <div class="card-body">
+        <p class="card-text">{{replay.body|safe}}</p>
+      </div>
+    </div><br/>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div><br/>
+    
+{% endfor %}
+{% endblock %}
+
+
+
+
+
+

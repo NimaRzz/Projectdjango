@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} Verify User Register {% endblock%}
+{% block content %} 
+<h2 class="text-center">Verify User Register</h2>
+<br/><br/>
+<form action="" method="post" class="col-md-3">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Verify Register" class="btn btn-primary">
+</form>
+
+{% endblock %}
